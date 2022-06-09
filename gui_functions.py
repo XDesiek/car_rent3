@@ -1,23 +1,25 @@
 
 
-def login_check(Session,Employee,username_entry,password_entry,root):
+def login_check(Session,Employee,username_entry,password_entry,root):                           
     import tkinter as tk
     session = Session()
     username_checkbox=username_entry.get()
     password_checkbox=password_entry.get()
-    user = session.query(Employee).filter(Employee.username == username_checkbox).all()
-    password = session.query(Employee).filter(Employee.password ==password_checkbox).all()
-    
-    
-    # print (f"\n\n\n\n\n {user.type()} \n\n\n\n\n")
-
-
-    if user == password:# bedzie sie wieszac przy wielu takich samych paswordach
-        root.destroy()
-        tk.messagebox.showinfo(title="login box",message='everything is correct')
-    elif user != password:
-        tk.messagebox.showerror(title="login box",message='login is not correct').pack()    
-    session.close()
+    user = session.query(Employee).filter(Employee.username == username_checkbox).first()
+    if username_checkbox ==(""):
+        tk.messagebox.showerror(root,message="you didn't enter your username").pack()
+    else:
+        if password_checkbox ==(""):
+            tk.messagebox.showerror(root,message="you didn't enter your password").pack()
+        else:    
+            if user is not None:
+                if user.password == password_checkbox:
+                    tk.messagebox.showinfo(root,message='everything is correct')
+                    root.destroy()     
+                else:
+                        tk.messagebox.showerror(root,message="your password isn't correct").pack()
+            else:
+                tk.messagebox.showerror(root,message="your username isn't correct").pack()
 
 def all_cars(Session,Car):
     sessioncar = Session()
@@ -31,55 +33,21 @@ def all_cars(Session,Car):
 
 
 
+def add_user(Session,Employee,window,name_entry,surname_entry,username_entry,password_entry):
+    import tkinter as tk
+    session = Session()
+    name=name_entry.get()
+    surname=surname_entry.get()
+    username=username_entry.get()
+    password=password_entry.get()
 
-
-
-
-
-
-
-
-# def add_user(root,):
-#     import tkinter as tk
-#     from tkinter import ttk
-#     root.destroy()
-    
-#     window = tk.Tk()
-#     window.columnconfigure(0, weight=1)
-#     window.columnconfigure(1, weight=3)
-
-#     # name
-#     name_label = ttk.Label(window, text="name:")
-#     name_label.grid(column=0, row=0, sticky=tk.W, padx=5, pady=5)
-
-#     name_entry = ttk.Entry(window)
-#     name_entry.grid(column=1, row=0, sticky=tk.E, padx=5, pady=5)
-#     # surname
-#     surname_label = ttk.Label(window, text="surname:")
-#     surname_label.grid(column=0, row=1, sticky=tk.W, padx=5, pady=5)
-
-#     surname_entry = ttk.Entry(window)
-#     surname_entry.grid(column=1, row=1, sticky=tk.E, padx=5, pady=5)
-#     # username
-#     username_label = ttk.Label(window, text="Username:")
-#     username_label.grid(column=0, row=2, sticky=tk.W, padx=5, pady=5)
-
-#     username_entry = ttk.Entry(window)
-#     username_entry.grid(column=1, row=2, sticky=tk.E, padx=5, pady=5)
-#     # password
-#     password_label = ttk.Label(window, text="password:")
-#     password_label.grid(column=0, row=3, sticky=tk.W, padx=5, pady=5)
-
-#     password_entry = ttk.Entry(window)
-#     password_entry.grid(column=1, row=3, sticky=tk.E, padx=5, pady=5)
-
-#     # login button
-#     login_button = ttk.Button(window, text="Login",command=lambda:submit())
-#     login_button.grid(column=1, row=4, sticky=tk.E, padx=5, pady=5)
-    
-#     window.columnconfigure(0, weight=1)
-#     window.columnconfigure(1, weight=3)
-
-
-#     window.mainloop()
+    double_user_check = session.query(Employee).filter(Employee.username == username).first()
+    if double_user_check is None:
+        ziomek = Employee(name,surname,username,password)
+        session.add(ziomek)
+        session.commit()
+        session.close()
+        window.destroy()
+    else:
+        tk.messagebox.showerror(title="login box",message="your username has been already taken").pack()
 

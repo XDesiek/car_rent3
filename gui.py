@@ -3,11 +3,11 @@ from tkinter import ttk
 from employees import Employee
 from cars import Car
 from base_car_rent3 import Session
-from gui_functions import login_check, all_cars
+from gui_functions import login_check, all_cars,add_user
 from tkinter.messagebox import showinfo,showerror
 
 
-def add_user(root,):
+def add_user_gui(root):
     root.destroy()
     
     window = tk.Tk()
@@ -39,12 +39,11 @@ def add_user(root,):
     password_entry = ttk.Entry(window)
     password_entry.grid(column=1, row=3, sticky=tk.E, padx=5, pady=5)
 
-    # login button
-    login_button = ttk.Button(window, text="Login",command=lambda:submit())
-    login_button.grid(column=1, row=4, sticky=tk.E, padx=5, pady=5)
+    # Submit button
+    submit_button = ttk.Button(window, text="Submit",command=lambda:add_user(Session,Employee,window,name_entry,surname_entry,username_entry,password_entry))
+    submit_button.grid(column=1, row=4, sticky=tk.E, padx=5, pady=5)
     
-    window.columnconfigure(0, weight=1)
-    window.columnconfigure(1, weight=3)
+
 
 
     window.mainloop()
@@ -81,7 +80,7 @@ login_button = ttk.Button(root, text="Login",command=lambda:login_check(Session,
 login_button.grid(column=1, row=3, sticky=tk.E, padx=5, pady=5)
 
 
-add_user_button = ttk.Button(root, text="add user",command=lambda:login_check(Session,Employee,username_entry,password_entry,root,tk))
+add_user_button = ttk.Button(root, text="add user",command=lambda:add_user_gui(root))
 add_user_button.grid(column=0, row=3, sticky=tk.E, padx=5, pady=5)
 
 root.mainloop()
